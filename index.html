@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mesa de ayuda de Tecnimática S.A.S.">
+  <title>Mesa de ayuda | Tecnimática S.A.S.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Tecnimática inicio">
+        <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 12h24v4H8zm0 7h24v4H8zm0 7h15v4H8z"/><circle cx="29" cy="28" r="4"/></svg></span>
+        <span class="brand-copy"><strong>TECNIMÁTICA</strong><small>TECNOLOGÍA INDUSTRIAL</small></span>
+      </a>
+      <div class="workspace-label">ESPACIO DE TRABAJO</div>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span> Panel de control</button>
+        <button class="nav-link" data-view="tickets"><span class="nav-icon">▤</span> Todos los tickets <span class="nav-count" id="navTicketCount">0</span></button>
+        <button class="nav-link" data-action="new-ticket"><span class="nav-icon">＋</span> Crear solicitud</button>
+        <button class="nav-link" data-view="knowledge"><span class="nav-icon">▧</span> Base de conocimiento</button>
+      </nav>
+      <div class="sidebar-divider"></div>
+      <div class="workspace-label">SOPORTE TÉCNICO</div>
+      <div class="support-card">
+        <span class="support-pulse"></span>
+        <div><strong>Equipo de soporte</strong><small>Atención a usuarios y planta</small></div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="help-box">
+          <div class="help-icon">✳</div>
+          <strong>¿Necesitas ayuda?</strong>
+          <p>Registra tu solicitud y nuestro equipo te ayudará a encontrar una solución.</p>
+          <button class="btn btn-light btn-full" data-action="new-ticket">Crear ticket <span>↗</span></button>
+        </div>
+        <div class="sidebar-footer"><span class="footer-dot"></span> Plataforma de soporte interno <span class="version">v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
+        <div class="breadcrumb"><span>Soporte TI</span><span class="crumb-sep">/</span><strong id="breadcrumbCurrent">Panel de control</strong></div>
+        <div class="topbar-actions">
+          <span class="system-status"><span class="status-dot"></span> Sistemas operativos</span>
+          <button class="icon-button" id="helpButton" aria-label="Información de ayuda" title="Ayuda">?</button>
+          <div class="avatar" title="Usuario">U</div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <section class="page-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> CENTRO DE SERVICIOS</div>
+            <h1 id="pageTitle">Panel de control</h1>
+            <p id="pageSubtitle">Visibilidad y seguimiento de las solicitudes de soporte de Tecnimática.</p>
+          </div>
+          <div class="heading-actions">
+            <button class="btn btn-outline" id="exportBtn"><span>↓</span> Exportar CSV</button>
+            <button class="btn btn-primary" data-action="new-ticket"><span>＋</span> Nuevo ticket</button>
+          </div>
+        </section>
+
+        <section class="metrics-grid" aria-label="Resumen de solicitudes">
+          <article class="metric-card">
+            <div class="metric-top"><span class="metric-label">TOTAL DE TICKETS</span><span class="metric-icon icon-blue">▤</span></div>
+            <div class="metric-value" id="metricTotal">0</div><div class="metric-foot"><span class="metric-neutral">●</span> Solicitudes registradas</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span class="metric-label">PENDIENTES</span><span class="metric-icon icon-amber">◷</span></div>
+            <div class="metric-value" id="metricPending">0</div><div class="metric-foot">En espera de atención</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span class="metric-label">EN PROCESO</span><span class="metric-icon icon-violet">⌁</span></div>
+            <div class="metric-value" id="metricProgress">0</div><div class="metric-foot">En manos del equipo técnico</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span class="metric-label">RESUELTOS</span><span class="metric-icon icon-green">✓</span></div>
+            <div class="metric-value" id="metricResolved">0</div><div class="metric-foot"><span class="positive-dot">●</span> Casos solucionados</div>
+          </article>
+        </section>
+
+        <section class="overview-grid" id="dashboardOverview">
+          <article class="panel service-panel">
+            <div class="panel-heading"><div><h2><span class="heading-symbol">◈</span> Solicitudes por categoría</h2><p>Distribución de incidencias registradas</p></div><span class="tiny-tag">EN VIVO</span></div>
+            <div class="category-list" id="categoryList"></div>
+            <div class="panel-bottom-note"><span class="note-check">✓</span> Clasificación basada en los tickets registrados</div>
+          </article>
+          <article class="panel priority-panel">
+            <div class="panel-heading"><div><h2><span class="heading-symbol">◉</span> Nivel de prioridad</h2><p>Atención según impacto operativo</p></div></div>
+            <div id="priorityList" class="priority-list"></div>
+            <div class="sla-note"><div class="sla-note-icon">⌁</div><div><strong>Compromiso de servicio</strong><p>Priorizamos las incidencias que afectan la continuidad operativa.</p></div></div>
+          </article>
+        </section>
+
+        <section class="panel tickets-panel" id="ticketsSection">
+          <div class="panel-heading tickets-heading">
+            <div><h2><span class="heading-symbol">▤</span> Solicitudes recientes</h2><p>Consulta y gestiona los casos de soporte</p></div>
+            <button class="btn btn-outline btn-small" id="viewAllBtn">Ver todos <span>→</span></button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar por ticket, solicitante o asunto..." aria-label="Buscar tickets"></label>
+            <div class="filter-controls">
+              <select id="statusFilter" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option>Pendiente</option><option>En proceso</option><option>Resuelto</option></select>
+              <select id="priorityFilter" aria-label="Filtrar por prioridad"><option value="">Todas las prioridades</option><option>Crítica</option><option>Alta</option><option>Media</option><option>Baja</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>CÓDIGO</th><th>SOLICITANTE</th><th>CATEGORÍA</th><th>ASUNTO</th><th>PRIORIDAD</th><th>ESTADO</th><th></th></tr></thead>
+              <tbody id="ticketsTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState" hidden><span>⌕</span><strong>No encontramos solicitudes</strong><p>Prueba con otra búsqueda o crea un nuevo ticket.</p><button class="btn btn-primary btn-small" data-action="new-ticket">Crear ticket</button></div>
+          </div>
+          <div class="table-footer"><span id="tableCount">Mostrando 0 solicitudes</span><span>Los datos se guardan en este navegador</span></div>
+        </section>
+
+        <section class="knowledge-section" id="knowledgeSection" hidden>
+          <div class="knowledge-intro"><span class="knowledge-symbol">▧</span><div><h2>Base de conocimiento</h2><p>Guías rápidas para resolver situaciones comunes antes de crear un ticket.</p></div></div>
+          <div class="knowledge-grid">
+            <article class="knowledge-card"><span class="knowledge-icon">⌘</span><span class="knowledge-tag">ACCESOS</span><h3>Problemas de inicio de sesión</h3><p>Verifica tu conexión de red, el usuario y el estado del teclado. Si el acceso sigue bloqueado, registra una solicitud.</p><button data-article="accesos">Leer recomendación <span>→</span></button></article>
+            <article class="knowledge-card"><span class="knowledge-icon">▦</span><span class="knowledge-tag">SOFTWARE</span><h3>Aplicaciones industriales</h3><p>Indica el nombre del sistema, el equipo afectado y el mensaje de error. Evita reiniciar equipos de producción sin autorización.</p><button data-article="software">Leer recomendación <span>→</span></button></article>
+            <article class="knowledge-card"><span class="knowledge-icon">⌁</span><span class="knowledge-tag">INFRAESTRUCTURA</span><h3>Conectividad y red</h3><p>Comprueba si el inconveniente afecta a un solo usuario o a un área completa y registra la hora en que comenzó.</p><button data-article="red">Leer recomendación <span>→</span></button></article>
+            <article class="knowledge-card"><span class="knowledge-icon">⚙</span><span class="knowledge-tag">EQUIPOS</span><h3>Equipos y periféricos</h3><p>Describe el equipo, su ubicación y las señales observadas. Para equipos industriales, sigue siempre el procedimiento de seguridad.</p><button data-article="equipos">Leer recomendación <span>→</span></button></article>
+          </div>
+        </section>
+
+        <footer class="page-footer"><span>© <span id="currentYear"></span> Tecnimática S.A.S. · Tecnología e informática industrial</span><span><span class="footer-dot"></span> Mesa de ayuda interna</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="ticketModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><div><span class="modal-kicker">CENTRO DE SERVICIOS</span><h2 id="modalTitle">Crear nueva solicitud</h2><p>Cuéntanos qué está ocurriendo y te ayudaremos.</p></div><button class="modal-close" data-close-modal aria-label="Cerrar">×</button></div>
+      <form id="ticketForm">
+        <div class="form-grid">
+          <label>Nombre del solicitante <span>*</span><input name="requester" required maxlength="80" placeholder="Ej. Camilo Osorio"></label>
+          <label>Correo electrónico <span>*</span><input name="email" type="email" required maxlength="120" placeholder="usuario@empresa.com"></label>
+          <label class="full-field">Asunto de la solicitud <span>*</span><input name="subject" required maxlength="120" placeholder="Resume el problema en una frase"></label>
+          <label>Categoría <span>*</span><select name="category" required><option value="">Selecciona una categoría</option><option>Software industrial</option><option>Equipos y periféricos</option><option>Red e infraestructura</option><option>Accesos y usuarios</option><option>Automatización / planta</option><option>Otros</option></select></label>
+          <label>Prioridad <span>*</span><select name="priority" required><option>Media</option><option>Baja</option><option>Alta</option><option>Crítica</option></select></label>
+          <label class="full-field">Descripción del inconveniente <span>*</span><textarea name="description" required rows="4" maxlength="1500" placeholder="Describe qué ocurre, desde cuándo y qué equipo o sistema está afectado..."></textarea></label>
+        </div>
+        <div class="form-hint"><span>ⓘ</span> Si el problema afecta una operación industrial, indícalo en la descripción.</div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" data-close-modal>Cancelar</button><button type="submit" class="btn btn-primary"><span>＋</span> Registrar ticket</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="detailModal" hidden>
+    <section class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="modal-header"><div><span class="modal-kicker" id="detailCode">TICKET</span><h2 id="detailTitle">Detalle de solicitud</h2><p id="detailSubtitle"></p></div><button class="modal-close" data-close-modal aria-label="Cerrar">×</button></div>
+      <div id="detailContent" class="detail-content"></div>
+      <div class="modal-actions detail-actions"><button class="btn btn-outline" data-close-modal>Cerrar</button><button class="btn btn-primary" id="nextStatusBtn">Actualizar estado</button></div>
+    </section>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+</body>
+</html>
